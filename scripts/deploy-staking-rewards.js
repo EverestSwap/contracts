@@ -1,6 +1,6 @@
 const { ethers } = require('hardhat');
 
-const { EVRS_ADDRESS, WICY_ADDRESS } = require("./mainnet-constants");
+const { EVRS_ADDRESS, WICZ_ADDRESS } = require("./mainnet-constants");
 
 async function main() {
 
@@ -8,7 +8,7 @@ async function main() {
 
     console.log("Deploying contracts with the account:", deployer.address);
 
-    const rewardsTokenAddress = ethers.utils.getAddress(WICY_ADDRESS);
+    const rewardsTokenAddress = ethers.utils.getAddress(WICZ_ADDRESS);
     const stakingTokenAddress = ethers.utils.getAddress(EVRS_ADDRESS);
 
     // Deploy StakingRewards

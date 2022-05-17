@@ -6,10 +6,10 @@ import {
     fundLiquidityToken,
     getTokenContract,
     getPairContract,
-    getWICYContract,
+    getWICZContract,
     getDeadline,
     fundToken,
-    fundWICY
+    fundWICZ
 } from "./utils"
 import fixture from './fixture'
 import {run} from "hardhat"
@@ -23,13 +23,13 @@ describe("BridgeMigrationRouter", async function() {
     let accountGenerator: ()=>SignerWithAddress
     let owner: SignerWithAddress
     let account: SignerWithAddress
-    let WICY: Contract
+    let WICZ: Contract
     let factory: ContractFactory
     let migrationRouter: Contract
     type MigratorTokenSymbol = keyof typeof fixture.Migrators
     type TokenSymbol = keyof typeof fixture.Tokens
-    type ICYPairsTokenSymbol = keyof typeof fixture.Pairs.ICY
-    type ICYMigratedPairsTokenSymbol = keyof typeof fixture.Pairs.Migrated.ICY
+    type ICZPairsTokenSymbol = keyof typeof fixture.Pairs.ICZ
+    type ICZMigratedPairsTokenSymbol = keyof typeof fixture.Pairs.Migrated.ICZ
     type EVRSPairsTokenSymbol = keyof typeof fixture.Pairs.EVRS
     type EVRSMigratedPairsTokenSymbol = keyof typeof fixture.Pairs.Migrated.EVRS
 
@@ -38,13 +38,13 @@ describe("BridgeMigrationRouter", async function() {
         accountGenerator = await makeAccountGenerator()
         const bridgeTokenFactory = await ethers.getContractFactory("BridgeToken")
         owner = await getOwnerAccount()
-        WICY = await getWICYContract()
+        WICZ = await getWICZContract()
         const factory = await ethers.getContractAt("EverestFactory", fixture.Factory)
         const router = await ethers.getContractAt("EverestRouter", fixture.Router)
 
-        await fundWICY(owner, BigNumber.from(10).pow(28))
+        await fundWICZ(owner, BigNumber.from(10).pow(28))
         await fundToken(owner, fixture.Tokens.EVRS, BigNumber.from(10).pow(25))
-        await (await getTokenContract(fixture.Tokens.WICY)).approve(router.address, ethers.constants.MaxUint256)
+        await (await getTokenContract(fixture.Tokens.WICZ)).approve(router.address, ethers.constants.MaxUint256)
         await (await getTokenContract(fixture.Tokens.EVRS)).approve(router.address, ethers.constants.MaxUint256)
         
         // in case we don't have the migrator deployed, it deploys migrators
@@ -66,23 +66,23 @@ describe("BridgeMigrationRouter", async function() {
             await bridgeToken.connect(owner).approve(router.address, ethers.constants.MaxUint256)
         }
 
-        // if there's no pairs in the migrators, create the pairs and add liquidity for ICY pairs
-        for(let tokenSymbol of Object.keys(fixture.Pairs.Migrated.ICY)) {
+        // if there's no pairs in the migrators, create the pairs and add liquidity for ICZ pairs
+        for(let tokenSymbol of Object.keys(fixture.Pairs.Migrated.ICZ)) {
             let tokenAddress = fixture.Migrators[tokenSymbol as MigratorTokenSymbol]
             if (!tokenAddress) continue
-            if (fixture.Pairs.Migrated.ICY[tokenSymbol as ICYMigratedPairsTokenSymbol] !== "") {
+            if (fixture.Pairs.Migrated.ICZ[tokenSymbol as ICZMigratedPairsTokenSymbol] !== "") {
                 continue
             }
             const price = BigNumber.from("1000000000000000000")
-            if (await factory.getPair(fixture.Tokens.WICY, tokenAddress) == ethers.constants.AddressZero) {
+            if (await factory.getPair(fixture.Tokens.WICZ, tokenAddress) == ethers.constants.AddressZero) {
                 await router.connect(owner).addLiquidity(
-                    fixture.Tokens.WICY, tokenAddress,
+                    fixture.Tokens.WICZ, tokenAddress,
                     price, price.mul(2), price, price.mul(2),
                     owner.address, getDeadline()
                 )
             }
             
-            fixture.Pairs.Migrated.ICY[tokenSymbol as ICYMigratedPairsTokenSymbol] = await factory.getPair(fixture.Tokens.WICY, tokenAddress)
+            fixture.Pairs.Migrated.ICZ[tokenSymbol as ICZMigratedPairsTokenSymbol] = await factory.getPair(fixture.Tokens.WICZ, tokenAddress)
         }
 
         // if there's no pairs in the migrators, create the pairs and add liquidity for EVRS pairs
@@ -109,12 +109,12 @@ describe("BridgeMigrationRouter", async function() {
 
     beforeEach(async () => {
         account = accountGenerator()
-        //this is necessary, the asserts funds the account on the assumption it has 0 WICY
-        await WICY.connect(account).withdraw(await WICY.balanceOf(account.address))
+        //this is necessary, the asserts funds the account on the assumption it has 0 WICZ
+        await WICZ.connect(account).withdraw(await WICZ.balanceOf(account.address))
         factory = await ethers.getContractFactory("EverestBridgeMigrationRouter")
         migrationRouter = await factory.connect(owner).deploy()
         await migrationRouter.deployed()
-        await fundWICY(account, BigNumber.from(10).pow(26))
+        await fundWICZ(account, BigNumber.from(10).pow(26))
 
     })
 
@@ -153,7 +153,7 @@ describe("BridgeMigrationRouter", async function() {
         })
 
         it("Admin can't add migrator incompatible with the token", async function() {
-            await expect(migrationRouter.connect(owner).addMigrator(fixture.Tokens.WICY, fixture.Migrators.WBTC)).to.be.reverted
+            await expect(migrationRouter.connect(owner).addMigrator(fixture.Tokens.WICZ, fixture.Migrators.WBTC)).to.be.reverted
         })
 
         for(let tokenSymbol of Object.keys(fixture.Migrators)) {
@@ -198,14 +198,14 @@ describe("BridgeMigrationRouter", async function() {
     })
 
     describe("Liquidity Migration", async function() {
-        describe("ICY", async function () {
+        describe("ICZ", async function () {
             for(let tokenSymbol of Object.keys(fixture.Migrators)) {
                 let tokenAddress = fixture.Tokens[tokenSymbol as TokenSymbol]
-                if (!((tokenSymbol as ICYPairsTokenSymbol) in fixture.Pairs.ICY)) continue
+                if (!((tokenSymbol as ICZPairsTokenSymbol) in fixture.Pairs.ICZ)) continue
                 if (fixture.TokensWithoutFund.includes(tokenSymbol)) continue
-                it(`Can migrate liquidity from ICY-${tokenSymbol}`, async function() {
-                    let pairAddress = fixture.Pairs.ICY[tokenSymbol as ICYPairsTokenSymbol]
-                    let toPairAddress = fixture.Pairs.Migrated.ICY[tokenSymbol as ICYMigratedPairsTokenSymbol]
+                it(`Can migrate liquidity from ICZ-${tokenSymbol}`, async function() {
+                    let pairAddress = fixture.Pairs.ICZ[tokenSymbol as ICZPairsTokenSymbol]
+                    let toPairAddress = fixture.Pairs.Migrated.ICZ[tokenSymbol as ICZMigratedPairsTokenSymbol]
                     let migrator = fixture.Migrators[tokenSymbol as MigratorTokenSymbol]
                     let fromPairContract = await getTokenContract(pairAddress)
                     await migrationRouter.connect(owner).addMigrator(tokenAddress, migrator)
@@ -225,9 +225,9 @@ describe("BridgeMigrationRouter", async function() {
                     expect(await fromPairContract.balanceOf(migrationRouter.address)).to.equal(0)
 
                 })
-                it(`Can compute accurately chargeback from ICY-${tokenSymbol}`, async function() {
-                    let pairAddress = fixture.Pairs.ICY[tokenSymbol as ICYPairsTokenSymbol]
-                    let toPairAddress = fixture.Pairs.Migrated.ICY[tokenSymbol as ICYMigratedPairsTokenSymbol]
+                it(`Can compute accurately chargeback from ICZ-${tokenSymbol}`, async function() {
+                    let pairAddress = fixture.Pairs.ICZ[tokenSymbol as ICZPairsTokenSymbol]
+                    let toPairAddress = fixture.Pairs.Migrated.ICZ[tokenSymbol as ICZMigratedPairsTokenSymbol]
                     let migrator = fixture.Migrators[tokenSymbol as MigratorTokenSymbol]
                     await migrationRouter.connect(owner).addMigrator(tokenAddress, migrator)
                     let liquidityAmount = await fundLiquidityToken(account, pairAddress, BigNumber.from(10).pow(20))
@@ -261,7 +261,7 @@ describe("BridgeMigrationRouter", async function() {
         describe("EVRS", async function() {
             for(let tokenSymbol of Object.keys(fixture.Migrators)) {
                 let tokenAddress = fixture.Tokens[tokenSymbol as TokenSymbol]
-                if (!((tokenSymbol as ICYPairsTokenSymbol) in fixture.Pairs.EVRS)) continue
+                if (!((tokenSymbol as ICZPairsTokenSymbol) in fixture.Pairs.EVRS)) continue
                 if (fixture.TokensWithoutFund.includes(tokenSymbol)) continue
                 it(`Can migrate liquidity from EVRS-${tokenSymbol}`, async function() {
                     let pairAddress = fixture.Pairs.EVRS[tokenSymbol as EVRSPairsTokenSymbol]
@@ -286,8 +286,8 @@ describe("BridgeMigrationRouter", async function() {
 
                 })
                 it(`Can compute accurately chargeback from EVRS-${tokenSymbol}`, async function() {
-                    let pairAddress = fixture.Pairs.ICY[tokenSymbol as ICYPairsTokenSymbol]
-                    let toPairAddress = fixture.Pairs.Migrated.ICY[tokenSymbol as ICYMigratedPairsTokenSymbol]
+                    let pairAddress = fixture.Pairs.ICZ[tokenSymbol as ICZPairsTokenSymbol]
+                    let toPairAddress = fixture.Pairs.Migrated.ICZ[tokenSymbol as ICZMigratedPairsTokenSymbol]
                     let migrator = fixture.Migrators[tokenSymbol as MigratorTokenSymbol]
                     await migrationRouter.connect(owner).addMigrator(tokenAddress, migrator)
                     let liquidityAmount = await fundLiquidityToken(account, pairAddress, BigNumber.from(10).pow(20))

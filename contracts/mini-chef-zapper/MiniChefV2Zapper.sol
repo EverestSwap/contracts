@@ -3,7 +3,7 @@ pragma solidity 0.8.11;
 import "../everest-core/interfaces/IERC20.sol";
 import "../everest-core/interfaces/IEverestPair.sol";
 import "../everest-periphery/interfaces/IEverestRouter.sol";
-import "../everest-periphery/interfaces/IWICY.sol";
+import "../everest-periphery/interfaces/IWICZ.sol";
 
 import "../everest-lib/libraries/Babylonian.sol";
 import "../everest-lib/libraries/TransferHelper.sol";
@@ -29,40 +29,40 @@ contract MiniChefV2Zapper {
 
     IEverestRouter public immutable router;
     IMiniChefV2 public immutable miniChefV2;
-    address public immutable WICY;
+    address public immutable WICZ;
     uint256 public constant minimumAmount = 1000;
 
-    constructor(address _router, address _miniChefV2, address _WICY) {
-        // Safety checks to ensure WICY token address
-        IWICY(_WICY).deposit{value: 0}();
-        IWICY(_WICY).withdraw(0);
+    constructor(address _router, address _miniChefV2, address _WICZ) {
+        // Safety checks to ensure WICZ token address
+        IWICZ(_WICZ).deposit{value: 0}();
+        IWICZ(_WICZ).withdraw(0);
 
         router = IEverestRouter(_router);
         miniChefV2 = IMiniChefV2(_miniChefV2);
-        WICY = _WICY;
+        WICZ = _WICZ;
     }
 
     receive() external payable {
-        assert(msg.sender == WICY);
+        assert(msg.sender == WICZ);
     }
 
-    function zapInICY(address pairAddress, uint256 tokenAmountOutMin) external payable {
+    function zapInICZ(address pairAddress, uint256 tokenAmountOutMin) external payable {
         require(msg.value >= minimumAmount, 'Insignificant input amount');
         require(pairAddress != address(0), 'Invalid pair address');
 
-        IWICY(WICY).deposit{value: msg.value}();
+        IWICZ(WICZ).deposit{value: msg.value}();
 
-        _swapAndFarm(pairAddress, WICY, tokenAmountOutMin, 0, false);
+        _swapAndFarm(pairAddress, WICZ, tokenAmountOutMin, 0, false);
     }
 
-    function zapInAndFarmICY(address pairAddress, uint256 tokenAmountOutMin, uint256 pid) external payable {
+    function zapInAndFarmICZ(address pairAddress, uint256 tokenAmountOutMin, uint256 pid) external payable {
         require(msg.value >= minimumAmount, 'Insignificant input amount');
         require(pairAddress != address(0), 'Invalid pair address');
         require(miniChefV2.lpToken(pid) == pairAddress, 'Pair address does not correspond with pid');
 
-        IWICY(WICY).deposit{value: msg.value}();
+        IWICZ(WICZ).deposit{value: msg.value}();
 
-        _swapAndFarm(pairAddress, WICY, tokenAmountOutMin, pid, true);
+        _swapAndFarm(pairAddress, WICZ, tokenAmountOutMin, pid, true);
     }
 
     function zapIn(address pairAddress, address tokenIn, uint256 tokenInAmount, uint256 tokenAmountOutMin) public {
@@ -115,30 +115,30 @@ contract MiniChefV2Zapper {
         zapInAndFarm(pairAddress, tokenIn, tokenInAmount, tokenAmountOutMin, pid);
     }
 
-    function zapOutAndSwapICY(
+    function zapOutAndSwapICZ(
         address pairAddress,
         uint256 withdrawAmount,
-        uint256 desiredICYOutMin,
+        uint256 desiredICZOutMin,
         address to
     ) public {
-        zapOutAndSwap(pairAddress, withdrawAmount, WICY, desiredICYOutMin, address(this));
+        zapOutAndSwap(pairAddress, withdrawAmount, WICZ, desiredICZOutMin, address(this));
 
-        uint256 balance = IERC20(WICY).balanceOf(address(this));
-        IWICY(WICY).withdraw(balance);
+        uint256 balance = IERC20(WICZ).balanceOf(address(this));
+        IWICZ(WICZ).withdraw(balance);
 
-        TransferHelper.safeTransferICY(to, balance);
+        TransferHelper.safeTransferICZ(to, balance);
     }
 
-    function zapOutAndSwapICYViaPermit(
+    function zapOutAndSwapICZViaPermit(
         address pairAddress,
         uint256 withdrawAmount,
-        uint256 desiredICYOutMin,
+        uint256 desiredICZOutMin,
         address to,
         uint256 deadline,
         uint8 v, bytes32 r, bytes32 s
     ) external {
         IEverestPair(pairAddress).permit(msg.sender, address(this), withdrawAmount, deadline, v, r, s);
-        zapOutAndSwapICY(pairAddress, withdrawAmount, desiredICYOutMin, to);
+        zapOutAndSwapICZ(pairAddress, withdrawAmount, desiredICZOutMin, to);
     }
 
     function zapOut(address pairAddress, uint256 withdrawAmount, address to) public {

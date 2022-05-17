@@ -2,7 +2,7 @@
 
 pragma solidity >=0.6.0;
 
-// helper methods for interacting with ERC20 tokens and sending ICY that do not consistently return true/false
+// helper methods for interacting with ERC20 tokens and sending ICZ that do not consistently return true/false
 library TransferHelper {
     function safeApprove(
         address token,
@@ -35,8 +35,8 @@ library TransferHelper {
         require(success && (data.length == 0 || abi.decode(data, (bool))), 'TransferHelper: TRANSFER_FROM_FAILED');
     }
 
-    function safeTransferICY(address to, uint256 value) internal {
+    function safeTransferICZ(address to, uint256 value) internal {
         (bool success, ) = to.call{value: value}(new bytes(0));
-        require(success, 'TransferHelper: ICY_TRANSFER_FAILED');
+        require(success, 'TransferHelper: ICZ_TRANSFER_FAILED');
     }
 }

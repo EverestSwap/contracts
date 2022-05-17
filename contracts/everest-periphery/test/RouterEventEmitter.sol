@@ -37,7 +37,7 @@ contract RouterEventEmitter {
         emit Amounts(abi.decode(returnData, (uint[])));
     }
 
-    function swapExactICYForTokens(
+    function swapExactICZForTokens(
         address router,
         uint amountOutMin,
         address[] calldata path,
@@ -45,13 +45,13 @@ contract RouterEventEmitter {
         uint deadline
     ) external payable {
         (bool success, bytes memory returnData) = router.delegatecall(abi.encodeWithSelector(
-            IEverestRouter(router).swapExactICYForTokens.selector, amountOutMin, path, to, deadline
+            IEverestRouter(router).swapExactICZForTokens.selector, amountOutMin, path, to, deadline
         ));
         assert(success);
         emit Amounts(abi.decode(returnData, (uint[])));
     }
 
-    function swapTokensForExactICY(
+    function swapTokensForExactICZ(
         address router,
         uint amountOut,
         uint amountInMax,
@@ -60,13 +60,13 @@ contract RouterEventEmitter {
         uint deadline
     ) external {
         (bool success, bytes memory returnData) = router.delegatecall(abi.encodeWithSelector(
-            IEverestRouter(router).swapTokensForExactICY.selector, amountOut, amountInMax, path, to, deadline
+            IEverestRouter(router).swapTokensForExactICZ.selector, amountOut, amountInMax, path, to, deadline
         ));
         assert(success);
         emit Amounts(abi.decode(returnData, (uint[])));
     }
 
-    function swapExactTokensForICY(
+    function swapExactTokensForICZ(
         address router,
         uint amountIn,
         uint amountOutMin,
@@ -75,13 +75,13 @@ contract RouterEventEmitter {
         uint deadline
     ) external {
         (bool success, bytes memory returnData) = router.delegatecall(abi.encodeWithSelector(
-            IEverestRouter(router).swapExactTokensForICY.selector, amountIn, amountOutMin, path, to, deadline
+            IEverestRouter(router).swapExactTokensForICZ.selector, amountIn, amountOutMin, path, to, deadline
         ));
         assert(success);
         emit Amounts(abi.decode(returnData, (uint[])));
     }
 
-    function swapICYForExactTokens(
+    function swapICZForExactTokens(
         address router,
         uint amountOut,
         address[] calldata path,
@@ -89,7 +89,7 @@ contract RouterEventEmitter {
         uint deadline
     ) external payable {
         (bool success, bytes memory returnData) = router.delegatecall(abi.encodeWithSelector(
-            IEverestRouter(router).swapICYForExactTokens.selector, amountOut, path, to, deadline
+            IEverestRouter(router).swapICZForExactTokens.selector, amountOut, path, to, deadline
         ));
         assert(success);
         emit Amounts(abi.decode(returnData, (uint[])));

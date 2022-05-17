@@ -26,7 +26,7 @@ describe('StakingRewards', function () {
 
         this.MockLpToken = await ethers.getContractFactory("contracts/MockContract.sol:MockContract");
         this.MockPair = await ethers.getContractFactory("contracts/MockContract.sol:MockContract");
-        this.MockWicy = await ethers.getContractFactory("contracts/MockContract.sol:MockContract");
+        this.MockWicz = await ethers.getContractFactory("contracts/MockContract.sol:MockContract");
         this.MockTreasuryVester = await ethers.getContractFactory("contracts/MockContract.sol:MockContract");
 
         [ , this.addr2, this.addr3] = await ethers.getSigners();
@@ -34,9 +34,9 @@ describe('StakingRewards', function () {
         this.LpToken = await ethers.getContractFactory("Evrs");
 
         // ABIs for mocks
-        this.WICY = await ethers.getContractFactory("WICY");
-        this.wicy = await this.WICY.deploy();
-        await this.wicy.deployed();
+        this.WICZ = await ethers.getContractFactory("WICZ");
+        this.wicz = await this.WICZ.deploy();
+        await this.wicz.deployed();
 
         this.TreasuryVester = await ethers.getContractFactory("TreasuryVester");
 
@@ -51,8 +51,8 @@ describe('StakingRewards', function () {
         this.mockPair = await this.MockPair.deploy();
         await this.mockPair.deployed();
 
-        this.mockWicy = await this.MockWicy.deploy();
-        await this.mockWicy.deployed();
+        this.mockWicz = await this.MockWicz.deploy();
+        await this.mockWicz.deployed();
 
         this.mockTreasuryVester = await this.MockTreasuryVester.deploy();
         await this.mockTreasuryVester.deployed();
@@ -60,7 +60,7 @@ describe('StakingRewards', function () {
         this.evrs = await this.EVRS.deploy(OWNER_ADDRESS);
         await this.evrs.deployed();
 
-        this.lpManager = await this.LpManager.deploy(this.mockWicy.address, this.evrs.address,
+        this.lpManager = await this.LpManager.deploy(this.mockWicz.address, this.evrs.address,
                                                      this.mockTreasuryVester.address);
         await this.lpManager.deployed();
 
@@ -71,7 +71,7 @@ describe('StakingRewards', function () {
         this.treasury = await this.TreasuryVester.deploy(this.evrs.address);
         await this.treasury.deployed();
 
-        this.lpManagerTreasury = await this.LpManager2.deploy(this.mockWicy.address, this.evrs.address,
+        this.lpManagerTreasury = await this.LpManager2.deploy(this.mockWicz.address, this.evrs.address,
             this.treasury.address);
         await this.lpManagerTreasury.deployed()
 

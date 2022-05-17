@@ -89,14 +89,14 @@ async function main() {
 
     console.log("\n============\n DEPLOYMENT \n============");
 
-    // Deploy WICY if not defined
+    // Deploy WICZ if not defined
     let nativeToken;
     if (WRAPPED_NATIVE_TOKEN === undefined) {
-        console.log('No wrapped native token found. Deploying WICY...');
-        nativeToken = (await deploy("WICY", [])).address;
+        console.log('No wrapped native token found. Deploying WICZ...');
+        nativeToken = (await deploy("WICZ", [])).address;
     } else {
         nativeToken = WRAPPED_NATIVE_TOKEN;
-        console.log('Wrapped native token found. Using existing WICY:', nativeToken);
+        console.log('Wrapped native token found. Using existing WICZ:', nativeToken);
     }
 
     /**************
@@ -346,7 +346,7 @@ async function main() {
         { gasLimit: MAX_GAS }
     );
     await confirmTransactionCount();
-    console.log("Added MiniChef pool 1 for WICY-EVRS.");
+    console.log("Added MiniChef pool 1 for WICZ-EVRS.");
 
     // create native token paired farms for tokens in INITIAL_FARMS
     for (let i = 0; i < INITIAL_FARMS.length; i++) {

@@ -11,7 +11,7 @@ async function main() {
     const zapper = await Zapper.deploy(
         '0xE54Ca86531e17Ef3616d22Ca28b0D458b6C89106', // Router
         '0x1f806f7C8dED893fd3caE279191ad7Aa3798E928', // MiniChefV2
-        '0xB31f66AA3C1e785363F0875A1B74E27b85FD66c7', // WICY
+        '0xB31f66AA3C1e785363F0875A1B74E27b85FD66c7', // WICZ
     );
     await zapper.deployed();
 

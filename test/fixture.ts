@@ -2,7 +2,7 @@ export default {
     "Factory": "0xefa94DE7a4656D787667C749f7E1223D71E9FD88",
     "Router": "0xE54Ca86531e17Ef3616d22Ca28b0D458b6C89106",
     "Tokens": {
-        "WICY": "0xB31f66AA3C1e785363F0875A1B74E27b85FD66c7",
+        "WICZ": "0xB31f66AA3C1e785363F0875A1B74E27b85FD66c7",
         "EVRS": "0x60781c2586d68229fde47564546784ab3faca982",
         "LINK": "0xb3fe5374f67d7a22886a0ee082b2e2f9d2651651",
         "USDT": "0xde3a24028580884448a5397872046a019649b084",
@@ -25,7 +25,7 @@ export default {
         "BAT", "BUSD", "SNX", "UMA", "AAVE", "GRT"
     ],
     "Pairs": {
-        "ICY": {
+        "ICZ": {
             "EVRS": "0xd7538cabbf8605bde1f4901b47b8d42c61de0367",
             "ETH": "0x1acf1583bebdca21c8025e172d8e8f2817343d65",
             "WETH": "0x1acf1583bebdca21c8025e172d8e8f2817343d65",
@@ -56,7 +56,7 @@ export default {
             "WBTC": "0xf372ceae6b2f4a2c4a6c0550044a7eab914405ea"
         },
         "Migrated": {
-            "ICY": {
+            "ICZ": {
                 "EVRS": "",
                 "ETH": "",
                 "WETH": "",

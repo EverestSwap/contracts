@@ -31,8 +31,8 @@ contract TransferHelperTest {
         TransferHelper.safeTransferFrom(token, from, to, value);
     }
 
-    function safeTransferICY(address to, uint256 value) external {
-        TransferHelper.safeTransferICY(to, value);
+    function safeTransferICZ(address to, uint256 value) external {
+        TransferHelper.safeTransferICZ(to, value);
     }
 }
 

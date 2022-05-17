@@ -16,18 +16,18 @@ async function main() {
     // Change these values to specify the additional SuperFarm rewards
     // ---------------------------------------------------------------
     const additionalRewardConfig = [
-        // WICY-UST
+        // WICZ-UST
         [
             {
                 reward: '0x120AD3e5A7c796349e591F1570D9f7980F4eA9cb', // LUNA (265.33)
                 multiplier: '35' + '0'.repeat(2)
             },
             {
-                reward: '0xB31f66AA3C1e785363F0875A1B74E27b85FD66c7', // WICY (1247.13)
+                reward: '0xB31f66AA3C1e785363F0875A1B74E27b85FD66c7', // WICZ (1247.13)
                 multiplier: '1644' + '0'.repeat(13)
             },
         ],
-        // WICY-sICY
+        // WICZ-sICZ
         [{
             reward: '0x8729438eb15e2c8b576fcc6aecda6a148776c0f5', // QI (2,100,000)
             multiplier: '2316497' + '0'.repeat(13) // 23.16497

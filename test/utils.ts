@@ -38,47 +38,47 @@ export async function getPairContract(pairAddress: string): Promise<Contract> {
     return await ethers.getContractAt("IEverestPair", pairAddress)
 }
 
-export async function getWICYContract(): Promise<Contract> {
-    return await ethers.getContractAt("IWICY", fixture.Tokens.WICY)
+export async function getWICZContract(): Promise<Contract> {
+    return await ethers.getContractAt("IWICZ", fixture.Tokens.WICZ)
 }
 
-export async function fundWICY(account: SignerWithAddress, amount: BigNumber) {
-    const WICY = await getWICYContract()
-    await WICY.connect(account).deposit({value: amount})
-    expect(await WICY.balanceOf(account.address)).to.gte(amount)
+export async function fundWICZ(account: SignerWithAddress, amount: BigNumber) {
+    const WICZ = await getWICZContract()
+    await WICZ.connect(account).deposit({value: amount})
+    expect(await WICZ.balanceOf(account.address)).to.gte(amount)
 }
 
-export async function fundToken(account: SignerWithAddress, tokenToFund: string, amountIcy: BigNumber): Promise<BigNumber> {
-    const WICY = await ethers.getContractAt("IWICY", fixture.Tokens.WICY)
+export async function fundToken(account: SignerWithAddress, tokenToFund: string, amountIcz: BigNumber): Promise<BigNumber> {
+    const WICZ = await ethers.getContractAt("IWICZ", fixture.Tokens.WICZ)
     //we're already funded in this case
-    if (tokenToFund == WICY.address) return amountIcy
+    if (tokenToFund == WICZ.address) return amountIcz
 
     const tokenContract = await getTokenContract(tokenToFund)
-    type TokenSymbol = keyof typeof fixture.Pairs.ICY
+    type TokenSymbol = keyof typeof fixture.Pairs.ICZ
     const tokenSymbol = await tokenContract.symbol() as TokenSymbol
-    if (!(tokenSymbol in fixture.Pairs.ICY)) throw `No valid pair for ICY-${tokenSymbol} required to fund the account with 1INCH from WICY`
-    const pairAddress: string = fixture.Pairs.ICY[tokenSymbol]
+    if (!(tokenSymbol in fixture.Pairs.ICZ)) throw `No valid pair for ICZ-${tokenSymbol} required to fund the account with 1INCH from WICZ`
+    const pairAddress: string = fixture.Pairs.ICZ[tokenSymbol]
     const fundPairContract = await ethers.getContractAt("IEverestPair", pairAddress)
     let [reserves0, reserves1] = await fundPairContract.getReserves()
     const token0: string = await fundPairContract.token0()
-    if (token0 != fixture.Tokens.WICY) [reserves0, reserves1] = [reserves1, reserves0]
-    expect(await WICY.balanceOf(account.address)).to.gte(amountIcy)
-    await WICY.connect(account).transfer(fundPairContract.address, amountIcy)
+    if (token0 != fixture.Tokens.WICZ) [reserves0, reserves1] = [reserves1, reserves0]
+    expect(await WICZ.balanceOf(account.address)).to.gte(amountIcz)
+    await WICZ.connect(account).transfer(fundPairContract.address, amountIcz)
     let amountOut0 = BigNumber.from(0)
-    let amountOut1 = getAmountOut(amountIcy, reserves0, reserves1)
-    if (token0 != fixture.Tokens.WICY) [amountOut0, amountOut1] = [amountOut1, amountOut0]
-    expect(amountOut0.add(amountOut1), "Not enough ICY used, value is 0 due to rounding issues, use a bigger amountIcy").to.not.equal(0)
+    let amountOut1 = getAmountOut(amountIcz, reserves0, reserves1)
+    if (token0 != fixture.Tokens.WICZ) [amountOut0, amountOut1] = [amountOut1, amountOut0]
+    expect(amountOut0.add(amountOut1), "Not enough ICZ used, value is 0 due to rounding issues, use a bigger amountIcz").to.not.equal(0)
     await fundPairContract.connect(account).swap(amountOut0, amountOut1, account.address, [])
     return await tokenContract.balanceOf(account.address)
 }
 
-export async function fundLiquidityToken(account: SignerWithAddress, pairAddress: string, amountIcy: BigNumber): Promise<BigNumber> {
+export async function fundLiquidityToken(account: SignerWithAddress, pairAddress: string, amountIcz: BigNumber): Promise<BigNumber> {
     const pairContract = await getPairContract(pairAddress)
-    await fundWICY(account, amountIcy)
+    await fundWICZ(account, amountIcz)
     let pairToken0 = await getTokenContract(await pairContract.token0())
     let pairToken1 = await getTokenContract(await pairContract.token1())    
-    let amountToken0 = await fundToken(account, pairToken0.address, amountIcy.div(2))
-    let amountToken1 = await fundToken(account, pairToken1.address, amountIcy.div(2))
+    let amountToken0 = await fundToken(account, pairToken0.address, amountIcz.div(2))
+    let amountToken1 = await fundToken(account, pairToken1.address, amountIcz.div(2))
     expect(await pairToken0.balanceOf(account.address)).to.gte(amountToken0)
     expect(await pairToken1.balanceOf(account.address)).to.gte(amountToken1)
     

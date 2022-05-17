@@ -55,7 +55,7 @@ describe('Governance', function () {
         this.Timelock = await ethers.getContractFactory("Timelock");
         this.EVRS = await ethers.getContractFactory("Evrs");
 
-        this.Wicy = await ethers.getContractFactory("Evrs");
+        this.Wicz = await ethers.getContractFactory("Evrs");
         this.AltCoin = await ethers.getContractFactory("Evrs");
         this.TreasuryVester = await ethers.getContractFactory("TreasuryVester");
         this.LpManager = await ethers.getContractFactory("LiquidityPoolManagerV2");
@@ -63,7 +63,7 @@ describe('Governance', function () {
 
         this.Factory = await ethers.getContractFactory("EverestFactory");
 
-        this.MockPairIcy = await ethers.getContractFactory("contracts/MockContract.sol:MockContract");
+        this.MockPairIcz = await ethers.getContractFactory("contracts/MockContract.sol:MockContract");
     });
 
     beforeEach(async function () {
@@ -91,25 +91,25 @@ describe('Governance', function () {
         this.community = await this.Community.deploy(this.evrs.address);
         await this.community.deployed();
 
-        // WICY
-        this.wicy = await this.Wicy.deploy(OWNER_ADDRESS);
-        await this.wicy.deployed();
+        // WICZ
+        this.wicz = await this.Wicz.deploy(OWNER_ADDRESS);
+        await this.wicz.deployed();
 
         // AltCoin
         this.altCoin = await this.AltCoin.deploy(OWNER_ADDRESS);
         await this.altCoin.deployed();
 
         // LiquidityPoolManager
-        this.lpManager = await this.LpManager.deploy(this.wicy.address, this.evrs.address,
+        this.lpManager = await this.LpManager.deploy(this.wicz.address, this.evrs.address,
             this.treasury.address);
         await this.lpManager.deployed();
 
-        // Mock Icy Pair
-        this.mockPairIcy = await this.MockPairIcy.deploy();
-        await this.mockPairIcy.deployed();
+        // Mock Icz Pair
+        this.mockPairIcz = await this.MockPairIcz.deploy();
+        await this.mockPairIcz.deployed();
         // Setup mocks
-        await this.mockPairIcy.givenMethodReturnAddress(token0, this.wicy.address);
-        await this.mockPairIcy.givenMethodReturnAddress(token1, this.altCoin.address);
+        await this.mockPairIcz.givenMethodReturnAddress(token0, this.wicz.address);
+        await this.mockPairIcz.givenMethodReturnAddress(token1, this.altCoin.address);
 
         this.factory = await this.Factory.deploy(OWNER_ADDRESS);
         await this.factory.deployed();
@@ -135,13 +135,13 @@ describe('Governance', function () {
 
             // Set LpManager owner
             await this.lpManager.transferOwnership(this.timelock.address);
-            expect(await this.lpManager.isWhitelisted(this.mockPairIcy.address)).to.be.false;
-            await expect(this.lpManager.addWhitelistedPool(this.mockPairIcy.address,1)).to.be.revertedWith('Ownable: caller is not the owner');
+            expect(await this.lpManager.isWhitelisted(this.mockPairIcz.address)).to.be.false;
+            await expect(this.lpManager.addWhitelistedPool(this.mockPairIcz.address,1)).to.be.revertedWith('Ownable: caller is not the owner');
 
             const target = this.lpManager.address;
             const value = 0;
             const sig = 'addWhitelistedPool(address,uint256)';
-            const callData = ethers.utils.defaultAbiCoder.encode(['address','uint256'], [this.mockPairIcy.address, 1]);
+            const callData = ethers.utils.defaultAbiCoder.encode(['address','uint256'], [this.mockPairIcz.address, 1]);
 
             await ethers.provider.send("evm_setNextBlockTimestamp", [startTime]);
 
@@ -150,24 +150,24 @@ describe('Governance', function () {
             var updateTime = startTime + DELAY;
             await ethers.provider.send("evm_setNextBlockTimestamp", [updateTime]);
             await this.timelock.executeTransaction(target, value, sig, callData, startTime + DELAY);
-            expect(await this.lpManager.isWhitelisted(this.mockPairIcy.address)).to.be.true;
+            expect(await this.lpManager.isWhitelisted(this.mockPairIcz.address)).to.be.true;
         });
 
         it('Remove Whitelisted Pool', async function () {
             const startTime = 1631342739;
 
             // Whitelist the pool
-            await this.lpManager.addWhitelistedPool(this.mockPairIcy.address, 1);
-            expect(await this.lpManager.isWhitelisted(this.mockPairIcy.address)).to.be.true;
+            await this.lpManager.addWhitelistedPool(this.mockPairIcz.address, 1);
+            expect(await this.lpManager.isWhitelisted(this.mockPairIcz.address)).to.be.true;
 
             // Set LpManager owner
             await this.lpManager.transferOwnership(this.timelock.address);
-            await expect(this.lpManager.removeWhitelistedPool(this.mockPairIcy.address)).to.be.revertedWith('Ownable: caller is not the owner');
+            await expect(this.lpManager.removeWhitelistedPool(this.mockPairIcz.address)).to.be.revertedWith('Ownable: caller is not the owner');
 
             const target = this.lpManager.address;
             const value = 0;
             const sig = 'removeWhitelistedPool(address)';
-            const callData = ethers.utils.defaultAbiCoder.encode(['address'], [this.mockPairIcy.address]);
+            const callData = ethers.utils.defaultAbiCoder.encode(['address'], [this.mockPairIcz.address]);
 
             await ethers.provider.send("evm_setNextBlockTimestamp", [startTime]);
 
@@ -176,7 +176,7 @@ describe('Governance', function () {
             var updateTime = startTime + DELAY;
             await ethers.provider.send("evm_setNextBlockTimestamp", [updateTime]);
             await this.timelock.executeTransaction(target, value, sig, callData, startTime + DELAY);
-            expect(await this.lpManager.isWhitelisted(this.mockPairIcy.address)).to.be.false;
+            expect(await this.lpManager.isWhitelisted(this.mockPairIcz.address)).to.be.false;
         });
         it('Change LpManager', async function () {
             const startTime = 1641342739;
@@ -350,13 +350,13 @@ describe('Governance', function () {
 
             // Set LpManager owner
             await this.lpManager.transferOwnership(this.timelock.address);
-            expect(await this.lpManager.isWhitelisted(this.mockPairIcy.address)).to.be.false;
+            expect(await this.lpManager.isWhitelisted(this.mockPairIcz.address)).to.be.false;
 
             // Setup proposal
             const target = this.lpManager.address;
             const value = 0;
             const sig = 'addWhitelistedPool(address,uint256)';
-            const callData = ethers.utils.defaultAbiCoder.encode(['address', 'uint256'], [this.mockPairIcy.address, 5]);
+            const callData = ethers.utils.defaultAbiCoder.encode(['address', 'uint256'], [this.mockPairIcz.address, 5]);
 
             // Submit proposal
             await this.governorHandle2.propose([target], [value], [sig], [callData], "Change timelock admin");
@@ -380,7 +380,7 @@ describe('Governance', function () {
             await this.governor.execute(proposalId);
 
             // Check the results
-            expect(await this.lpManager.isWhitelisted(this.mockPairIcy.address)).to.be.true;
+            expect(await this.lpManager.isWhitelisted(this.mockPairIcz.address)).to.be.true;
         });
         it('Remove Whitelisted Pool', async function () {
             const startTime = 1697742739;
@@ -399,8 +399,8 @@ describe('Governance', function () {
             await this.governor.__acceptAdmin();
 
             // Whitelist the pool
-            await this.lpManager.addWhitelistedPool(this.mockPairIcy.address, 5);
-            expect(await this.lpManager.isWhitelisted(this.mockPairIcy.address)).to.be.true;
+            await this.lpManager.addWhitelistedPool(this.mockPairIcz.address, 5);
+            expect(await this.lpManager.isWhitelisted(this.mockPairIcz.address)).to.be.true;
 
             // Set LpManager owner
             await this.lpManager.transferOwnership(this.timelock.address);
@@ -409,7 +409,7 @@ describe('Governance', function () {
             const target = this.lpManager.address;
             const value = 0;
             const sig = 'removeWhitelistedPool(address)';
-            const callData = ethers.utils.defaultAbiCoder.encode(['address'], [this.mockPairIcy.address]);
+            const callData = ethers.utils.defaultAbiCoder.encode(['address'], [this.mockPairIcz.address]);
 
             // Submit proposal
             await this.governorHandle2.propose([target], [value], [sig], [callData], "Change timelock admin");
@@ -433,7 +433,7 @@ describe('Governance', function () {
             await this.governor.execute(proposalId);
 
             // Check the results
-            expect(await this.lpManager.isWhitelisted(this.mockPairIcy.address)).to.be.false;
+            expect(await this.lpManager.isWhitelisted(this.mockPairIcz.address)).to.be.false;
         });
         it('Change LpManager', async function () {
             const startTime = 1717742739;
@@ -712,7 +712,7 @@ describe('Governance', function () {
             const target = this.lpManager.address;
             const value = 0;
             const sig = 'addWhitelistedPool(address)';
-            const callData = ethers.utils.defaultAbiCoder.encode(['address'], [this.mockPairIcy.address]);
+            const callData = ethers.utils.defaultAbiCoder.encode(['address'], [this.mockPairIcz.address]);
 
             await ethers.provider.send("evm_setNextBlockTimestamp", [startTime]);
 
@@ -756,7 +756,7 @@ describe('Governance', function () {
             const target = this.lpManager.address;
             const value = 0;
             const sig = 'addWhitelistedPool(address)';
-            const callData = ethers.utils.defaultAbiCoder.encode(['address'], [this.mockPairIcy.address]);
+            const callData = ethers.utils.defaultAbiCoder.encode(['address'], [this.mockPairIcz.address]);
 
             // Submit proposal
             await this.governorHandle2.propose([target], [value], [sig], [callData], "Change timelock admin");
@@ -784,7 +784,7 @@ describe('Governance', function () {
             const target = this.lpManager.address;
             const value = 0;
             const sig = 'addWhitelistedPool(address)';
-            const callData = ethers.utils.defaultAbiCoder.encode(['address'], [this.mockPairIcy.address]);
+            const callData = ethers.utils.defaultAbiCoder.encode(['address'], [this.mockPairIcz.address]);
 
             // Submit proposal
             await this.governorHandle2.propose([target], [value], [sig], [callData], "Change timelock admin");

@@ -1,6 +1,6 @@
 const { OWNERS } = require('./shared')
 
-exports.WRAPPED_NATIVE_TOKEN = "0xDbd5b8C9cF1e13d6eba4Cf05868F9dc20e093FE1";
+exports.WRAPPED_NATIVE_TOKEN = '0xCaD63cfFeBFE83A7b39773617403F8A42311e7b2';
 exports.EVRS_SYMBOL = "EVRS";
 exports.EVRS_NAME = "Everest";
 exports.TOTAL_SUPPLY = 230000000; // 230M

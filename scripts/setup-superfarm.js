@@ -20,7 +20,7 @@ async function main() {
 
     const multisigSigner = await ethers.provider.getSigner(EVEREST_GNOSIS_SAFE);
 
-    // Ensure multisig has ICY to pay for gas
+    // Ensure multisig has ICZ to pay for gas
     await user1.sendTransaction({
         to: multisigSigner._address,
         value: ethers.utils.parseEther('1000.0')
@@ -87,7 +87,7 @@ async function main() {
     console.log(`Funded double rewarder`);
     console.log();
 
-    console.log(`Adding LOOT-WICY and ISA-WICY farms`);
+    console.log(`Adding LOOT-WICZ and ISA-WICZ farms`);
     await miniChef.connect(multisigSigner).addPools(
         ["300", "300"], // _allocPoints
         ["0x1bfae75b28925bf4a5bf830c141ea29cb0a868f1", "0xfba30990f79e1df3842bb8ac3d86b2454a760151"], // _lpTokens

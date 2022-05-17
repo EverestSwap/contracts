@@ -6,7 +6,7 @@ const MULTISIG = "0x66c048d27aFB5EE59E4C07101A483654246A4eda"; // gnosis
 const ROUTER = "0xE54Ca86531e17Ef3616d22Ca28b0D458b6C89106";
 const MINICHEF = "0x1f806f7C8dED893fd3caE279191ad7Aa3798E928";
 const GOVERNOR = "0xEB5c91bE6Dbfd30cf616127C2EA823C64e4b1ff8"; // timelock
-const WICY = "0xB31f66AA3C1e785363F0875A1B74E27b85FD66c7";
+const WICZ = "0xB31f66AA3C1e785363F0875A1B74E27b85FD66c7";
 
 async function main() {
 
@@ -20,7 +20,7 @@ async function main() {
         MINICHEF,
         0, // chef pid for dummy EVRSL
         GOVERNOR,
-        WICY,
+        WICZ,
         MULTISIG // “treasury” fees
     );
     await feeCollector.deployed();

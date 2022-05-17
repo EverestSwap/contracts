@@ -2,7 +2,7 @@ pragma solidity >=0.6.2;
 
 interface IEverestRouter {
     function factory() external pure returns (address);
-    function WICY() external pure returns (address);
+    function WICZ() external pure returns (address);
 
     function addLiquidity(
         address tokenA,
@@ -14,14 +14,14 @@ interface IEverestRouter {
         address to,
         uint deadline
     ) external returns (uint amountA, uint amountB, uint liquidity);
-    function addLiquidityICY(
+    function addLiquidityICZ(
         address token,
         uint amountTokenDesired,
         uint amountTokenMin,
-        uint amountICYMin,
+        uint amountICZMin,
         address to,
         uint deadline
-    ) external payable returns (uint amountToken, uint amountICY, uint liquidity);
+    ) external payable returns (uint amountToken, uint amountICZ, uint liquidity);
     function removeLiquidity(
         address tokenA,
         address tokenB,
@@ -31,14 +31,14 @@ interface IEverestRouter {
         address to,
         uint deadline
     ) external returns (uint amountA, uint amountB);
-    function removeLiquidityICY(
+    function removeLiquidityICZ(
         address token,
         uint liquidity,
         uint amountTokenMin,
-        uint amountICYMin,
+        uint amountICZMin,
         address to,
         uint deadline
-    ) external returns (uint amountToken, uint amountICY);
+    ) external returns (uint amountToken, uint amountICZ);
     function removeLiquidityWithPermit(
         address tokenA,
         address tokenB,
@@ -49,15 +49,15 @@ interface IEverestRouter {
         uint deadline,
         bool approveMax, uint8 v, bytes32 r, bytes32 s
     ) external returns (uint amountA, uint amountB);
-    function removeLiquidityICYWithPermit(
+    function removeLiquidityICZWithPermit(
         address token,
         uint liquidity,
         uint amountTokenMin,
-        uint amountICYMin,
+        uint amountICZMin,
         address to,
         uint deadline,
         bool approveMax, uint8 v, bytes32 r, bytes32 s
-    ) external returns (uint amountToken, uint amountICY);
+    ) external returns (uint amountToken, uint amountICZ);
     function swapExactTokensForTokens(
         uint amountIn,
         uint amountOutMin,
@@ -72,17 +72,17 @@ interface IEverestRouter {
         address to,
         uint deadline
     ) external returns (uint[] memory amounts);
-    function swapExactICYForTokens(uint amountOutMin, address[] calldata path, address to, uint deadline)
+    function swapExactICZForTokens(uint amountOutMin, address[] calldata path, address to, uint deadline)
         external
         payable
         returns (uint[] memory amounts);
-    function swapTokensForExactICY(uint amountOut, uint amountInMax, address[] calldata path, address to, uint deadline)
+    function swapTokensForExactICZ(uint amountOut, uint amountInMax, address[] calldata path, address to, uint deadline)
         external
         returns (uint[] memory amounts);
-    function swapExactTokensForICY(uint amountIn, uint amountOutMin, address[] calldata path, address to, uint deadline)
+    function swapExactTokensForICZ(uint amountIn, uint amountOutMin, address[] calldata path, address to, uint deadline)
         external
         returns (uint[] memory amounts);
-    function swapICYForExactTokens(uint amountOut, address[] calldata path, address to, uint deadline)
+    function swapICZForExactTokens(uint amountOut, address[] calldata path, address to, uint deadline)
         external
         payable
         returns (uint[] memory amounts);
@@ -93,23 +93,23 @@ interface IEverestRouter {
     function getAmountsOut(uint amountIn, address[] calldata path) external view returns (uint[] memory amounts);
     function getAmountsIn(uint amountOut, address[] calldata path) external view returns (uint[] memory amounts);
 
-    function removeLiquidityICYSupportingFeeOnTransferTokens(
+    function removeLiquidityICZSupportingFeeOnTransferTokens(
         address token,
         uint liquidity,
         uint amountTokenMin,
-        uint amountICYMin,
+        uint amountICZMin,
         address to,
         uint deadline
-    ) external returns (uint amountICY);
-    function removeLiquidityICYWithPermitSupportingFeeOnTransferTokens(
+    ) external returns (uint amountICZ);
+    function removeLiquidityICZWithPermitSupportingFeeOnTransferTokens(
         address token,
         uint liquidity,
         uint amountTokenMin,
-        uint amountICYMin,
+        uint amountICZMin,
         address to,
         uint deadline,
         bool approveMax, uint8 v, bytes32 r, bytes32 s
-    ) external returns (uint amountICY);
+    ) external returns (uint amountICZ);
 
     function swapExactTokensForTokensSupportingFeeOnTransferTokens(
         uint amountIn,
@@ -118,13 +118,13 @@ interface IEverestRouter {
         address to,
         uint deadline
     ) external;
-    function swapExactICYForTokensSupportingFeeOnTransferTokens(
+    function swapExactICZForTokensSupportingFeeOnTransferTokens(
         uint amountOutMin,
         address[] calldata path,
         address to,
         uint deadline
     ) external payable;
-    function swapExactTokensForICYSupportingFeeOnTransferTokens(
+    function swapExactTokensForICZSupportingFeeOnTransferTokens(
         uint amountIn,
         uint amountOutMin,
         address[] calldata path,

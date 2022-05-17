@@ -17,9 +17,9 @@
 
 pragma solidity >=0.4.22 <0.6;
 
-contract WICY {
-    string public name     = "Wrapped ICY";
-    string public symbol   = "WICY";
+contract WICZ {
+    string public name     = "Wrapped ICZ";
+    string public symbol   = "WICZ";
     uint8  public decimals = 18;
 
     event  Approval(address indexed src, address indexed guy, uint wad);
