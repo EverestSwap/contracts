@@ -18,16 +18,10 @@ const {
     WETH_EVRS_FARM_ALLOCATION,
 } = require(`../constants/${network.name}.js`);
 if (USE_GNOSIS_SAFE) {
-    var { EthersAdapter, SafeFactory } = require("@gnosis.pm/safe-core-sdk");
+    const { EthersAdapter, SafeFactory } = require("@gnosis.pm/safe-core-sdk");
 }
 
-var contracts = [];
-
-function delay(timeout) {
-    return new Promise((resolve) => {
-        setTimeout(resolve, timeout);
-    });
-}
+const contracts = [];
 
 async function main() {
     const [deployer] = await ethers.getSigners();
@@ -57,7 +51,7 @@ async function main() {
     }
 
     // dirty hack to circumvent duplicate nonce submission error
-    var txCount = await ethers.provider.getTransactionCount(deployer.address);
+    let txCount = await ethers.provider.getTransactionCount(deployer.address);
     async function confirmTransactionCount() {
         let newTxCount;
         while (true) {
@@ -115,7 +109,7 @@ async function main() {
     // Deploy this chain’s multisig
     let multisig;
     if (USE_GNOSIS_SAFE) {
-        console.log('Deploying main multisig (no Gnosis safe)...');
+        console.log('Deploying main multisig (Gnosis safe)...');
         const ethAdapter = new EthersAdapter({
             ethers,
             signer: deployer,
@@ -126,7 +120,7 @@ async function main() {
         multisig.address = multisig.getAddress();
         console.log(multisig.address, ": Gnosis");
     } else {
-        console.log('Deploying main multisig...');
+        console.log('Deploying main multisig (legacy)...');
         multisig = await deploy("MultiSigWalletWithDailyLimit", [
             MULTISIG.owners,
             MULTISIG.threshold,
@@ -137,13 +131,13 @@ async function main() {
     // Deploy foundation multisig
     let foundation;
     if (USE_GNOSIS_SAFE) {
-        console.log('Deploying foundation multisig (no Gnosis safe)...');
+        console.log('Deploying foundation multisig (Gnosis safe)...');
         foundation = await MultisigGNOSafe.deploySafe(FOUNDATION_MULTISIG);
         await confirmTransactionCount();
         foundation.address = foundation.getAddress();
         console.log(foundation.address, ": Gnosis");
     } else {
-        console.log('Deploying foundation multisig...');
+        console.log('Deploying foundation multisig (legacy)...');
         foundation = await deploy("MultiSigWalletWithDailyLimit", [
             FOUNDATION_MULTISIG.owners,
             FOUNDATION_MULTISIG.threshold,
@@ -185,7 +179,7 @@ async function main() {
 
     console.log('Deploying treasury vester...');
     // Deploy TreasuryVester
-    var vesterAllocations = [];
+    const vesterAllocations = [];
     for (let i = 0; i < VESTER_ALLOCATIONS.length; i++) {
         vesterAllocations.push([
             eval(VESTER_ALLOCATIONS[i].recipient + ".address"),
@@ -204,7 +198,7 @@ async function main() {
      * FEE COLLECTOR *
      *****************/
 
-     console.log('Deploying joint multisig...');
+    console.log('Deploying joint multisig...');
     // Deploy 2/2 Joint MultisigGNOSafe
     if (USE_GNOSIS_SAFE) {
         var jointMultisig = await MultisigGNOSafe.deploySafe({
@@ -338,7 +332,7 @@ async function main() {
 
     await factory.createPair(evrs.address, nativeToken);
     await confirmTransactionCount();
-    var evrsPair = await factory.getPair(evrs.address, nativeToken);
+    const evrsPair = await factory.getPair(evrs.address, nativeToken);
     await chef.addPool(
         WETH_EVRS_FARM_ALLOCATION,
         evrsPair,
