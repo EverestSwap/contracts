@@ -33,7 +33,7 @@ const ICE_MAINNET = {
   id: 'ice_mainnet',
   chain_id: 550,
   name: 'ICE Network',
-  symbol: 'ICZ',
+  symbol: 'ICY',
   token_symbol: 'EVRS',
   mainnet: true,
   dex_is_live: false,
@@ -48,24 +48,24 @@ const ICE_MAINNET = {
   },
   nativeCurrency:{
     name: 'ICE',
-    symbol: 'ICZ',
+    symbol: 'ICY',
     decimals: 18,
   },
   blockExplorerUrls: [],
 }
 
-const ICE_FROST = {
-  id: 'ice_frost',
-  chain_id: 553,
-  name: 'ICE Frost Testnet',
+const ICE_SNOW = {
+  id: 'ice_snow',
+  chain_id: 551,
+  name: 'SNOW Network',
   symbol: 'ICZ',
   token_symbol: 'EVRS',
-  mainnet: false,
-  dex_is_live: true,
+  mainnet: true,
+  dex_is_live: false,
   tracked_by_debank: false,
   supported_by_gelato: false,
-  rpc_uri: 'https://frost-rpc.icenetwork.io:9933',
-  contracts: {
+  rpc_uri: 'https://snow-rpc.icenetwork.io',
+  contracts: { // TODO: add contracts addresses
     token: '',
     factory: '',
     router: '',
@@ -76,7 +76,7 @@ const ICE_FROST = {
     symbol: 'ICZ',
     decimals: 18,
   },
-  blockExplorerUrls: ['https://frost-blockscout.icenetwork.io'],
+  blockExplorerUrls: [],
 }
 
 const ICE_ARCTIC = {
@@ -112,7 +112,7 @@ exports.FOUNDATION_MULTISIG = {
 exports.CHAINS = [
   LOCALHOST,
   ICE_MAINNET,
-  ICE_FROST,
+  ICE_SNOW,
   ICE_ARCTIC,
 ]
 
