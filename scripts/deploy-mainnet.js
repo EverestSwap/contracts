@@ -9,6 +9,7 @@ const {
     USE_GNOSIS_SAFE,
     PROPOSAL_THRESHOLD,
     WRAPPED_NATIVE_TOKEN,
+    NATIVE_TOKEN_NAME,
     INITIAL_FARMS,
     AIRDROP_AMOUNT,
     VESTER_ALLOCATIONS,
@@ -85,12 +86,13 @@ async function main() {
 
     // Deploy WICZ if not defined
     let nativeToken;
+    const nativeTokenName = NATIVE_TOKEN_NAME || 'ICZ';
     if (WRAPPED_NATIVE_TOKEN === undefined) {
-        console.log('No wrapped native token found. Deploying WICZ...');
-        nativeToken = (await deploy("WICZ", [])).address;
+        console.log(`No wrapped native token found. Deploying W${nativeTokenName}...`);
+        nativeToken = (await deploy(`W${nativeTokenName}`, [])).address;
     } else {
         nativeToken = WRAPPED_NATIVE_TOKEN;
-        console.log('Wrapped native token found. Using existing WICZ:', nativeToken);
+        console.log(`Wrapped native token found. Using existing W${nativeTokenName}:`, nativeToken);
     }
 
     /**************
