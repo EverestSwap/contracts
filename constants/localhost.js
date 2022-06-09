@@ -1,6 +1,7 @@
 const { OWNERS } = require('./shared')
 
 exports.WRAPPED_NATIVE_TOKEN;
+exports.MULTICALL_ADDRESS;
 exports.NATIVE_TOKEN_NAME = "ICZ";
 exports.EVRS_SYMBOL = "EVRS";
 exports.EVRS_NAME = "Everest";

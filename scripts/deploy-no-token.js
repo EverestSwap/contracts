@@ -1,9 +1,12 @@
 const { ethers } = require("hardhat");
 const fs = require("fs");
+const { MAX_GAS } = require("../constants/shared.js");
 const {
     MULTISIG,
     USE_GNOSIS_SAFE,
-    WRAPPED_NATIVE_TOKEN
+    WRAPPED_NATIVE_TOKEN,
+    NATIVE_TOKEN_NAME,
+    MULTICALL_ADDRESS
 } = require(`../constants/${network.name}.js`);
 if (USE_GNOSIS_SAFE) {
     const { EthersAdapter, SafeFactory } = require("@gnosis.pm/safe-core-sdk");
@@ -26,12 +29,17 @@ async function main() {
     if (USE_GNOSIS_SAFE) {
         console.log("✅ Using Gnosis Safe.");
     } else {
-        console.log("⚠️ Using legacy multisig.");
+        console.log("⚠️  Using legacy multisig.");
     }
     if (WRAPPED_NATIVE_TOKEN === undefined || WRAPPED_NATIVE_TOKEN == "") {
-        console.log("⚠️ No wrapped gas token is defined.");
+        console.log("⚠️  No wrapped gas token is defined.");
     } else {
         console.log("✅ An existing wrapped gas token is defined.");
+    }
+    if (MULTICALL_ADDRESS === undefined || MULTICALL_ADDRESS == "") {
+        console.log("⚠️  No multicall contract is defined.");
+    } else {
+        console.log("✅ An existing multicall contract is defined.");
     }
 
     // dirty hack to circumvent duplicate nonce submission error
@@ -67,14 +75,21 @@ async function main() {
 
     console.log("\n============\n DEPLOYMENT \n============");
 
-    // Deploy WICZ if not defined
+    // Deploy WICZ or WICY if not defined
     let nativeToken;
+    const nativeTokenName = NATIVE_TOKEN_NAME || 'ICZ';
     if (WRAPPED_NATIVE_TOKEN === undefined) {
-        console.log('No wrapped native token found. Deploying WICZ...');
-        nativeToken = (await deploy("WICZ", [])).address;
+        console.log(`No wrapped native token found. Deploying W${nativeTokenName}...`);
+        nativeToken = (await deploy(`W${nativeTokenName}`, [])).address;
     } else {
         nativeToken = WRAPPED_NATIVE_TOKEN;
-        console.log('Wrapped native token found. Using existing WICZ:', nativeToken);
+        console.log(`Wrapped native token found. Using existing W${nativeTokenName}:`, nativeToken);
+    }
+
+    // Deploy Multicall
+    if (MULTICALL_ADDRESS === undefined) {
+        console.log(`Deploying Multicall...`);
+        await deploy(`Multicalll`, [], { gasLimit: MAX_GAS });
     }
 
     /************

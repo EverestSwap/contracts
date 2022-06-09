@@ -17,6 +17,7 @@ const {
     TIMELOCK_DELAY,
     EVRS_STAKING_ALLOCATION,
     WETH_EVRS_FARM_ALLOCATION,
+    MULTICALL_ADDRESS
 } = require(`../constants/${network.name}.js`);
 if (USE_GNOSIS_SAFE) {
     const { EthersAdapter, SafeFactory } = require("@gnosis.pm/safe-core-sdk");
@@ -46,6 +47,11 @@ async function main() {
         console.log("⚠️  No wrapped gas token is defined.");
     } else {
         console.log("✅ An existing wrapped gas token is defined.");
+    }
+    if (MULTICALL_ADDRESS === undefined || MULTICALL_ADDRESS == "") {
+        console.log("⚠️  No multicall contract is defined.");
+    } else {
+        console.log("✅ An existing multicall contract is defined.");
     }
     if (INITIAL_FARMS.length === 0 || INITIAL_FARMS === undefined) {
         console.log("⚠️  No initial farm is defined.");
@@ -84,7 +90,7 @@ async function main() {
 
     console.log("\n============\n DEPLOYMENT \n============");
 
-    // Deploy WICZ if not defined
+    // Deploy WICZ or WICY if not defined
     let nativeToken;
     const nativeTokenName = NATIVE_TOKEN_NAME || 'ICZ';
     if (WRAPPED_NATIVE_TOKEN === undefined) {
@@ -93,6 +99,12 @@ async function main() {
     } else {
         nativeToken = WRAPPED_NATIVE_TOKEN;
         console.log(`Wrapped native token found. Using existing W${nativeTokenName}:`, nativeToken);
+    }
+
+    // Deploy Multicall
+    if (MULTICALL_ADDRESS === undefined) {
+        console.log(`Deploying Multicall...`);
+        await deploy(`Multicalll`, [], { gasLimit: MAX_GAS });
     }
 
     /**************
