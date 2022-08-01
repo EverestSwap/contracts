@@ -1,30 +1,33 @@
-const { ethers } = require("hardhat");
 const fs = require("fs");
+const { ethers } = require("hardhat");
+const { EthersAdapter, SafeFactory } = require("@gnosis.pm/safe-core-sdk");
 const { MAX_GAS } = require("../constants/shared.js");
 const {
     MULTISIG,
     USE_GNOSIS_SAFE,
+    GNOSIS_SAFE_ADDRESSES,
     WRAPPED_NATIVE_TOKEN,
     NATIVE_TOKEN_NAME,
     MULTICALL_ADDRESS
 } = require(`../constants/${network.name}.js`);
-if (USE_GNOSIS_SAFE) {
-    const { EthersAdapter, SafeFactory } = require("@gnosis.pm/safe-core-sdk");
-}
 
 const contracts = [];
 
 async function main() {
     const [deployer] = await ethers.getSigners();
+    console.log("Task started: deploying contracts WITHOUT token...");
+    console.log("\n============\n CURRENT PARAMS \n============");
     console.log("\nDeployer:", deployer.address);
 
     const initBalance = await deployer.getBalance();
-    console.log("Balance:", ethers.utils.formatEther(initBalance) + "\n");
+    console.log("Balance:", ethers.utils.formatEther(initBalance));
     
     console.log("\nMultisig Owners:");
     for (const owner of MULTISIG.owners) {
         console.log(owner);
     }
+
+    console.log('\n')
 
     if (USE_GNOSIS_SAFE) {
         console.log("✅ Using Gnosis Safe.");
@@ -83,13 +86,12 @@ async function main() {
         nativeToken = (await deploy(`W${nativeTokenName}`, [])).address;
     } else {
         nativeToken = WRAPPED_NATIVE_TOKEN;
-        console.log(`Wrapped native token found. Using existing W${nativeTokenName}:`, nativeToken);
     }
 
     // Deploy Multicall
     if (MULTICALL_ADDRESS === undefined) {
         console.log(`Deploying Multicall...`);
-        await deploy(`Multicalll`, [], { gasLimit: MAX_GAS });
+        await deploy(`Multicall`, [], { gasLimit: MAX_GAS });
     }
 
     /************
@@ -99,12 +101,26 @@ async function main() {
     // Deploy multisig
     let multisig;
     if (USE_GNOSIS_SAFE) {
+        if (!GNOSIS_SAFE_ADDRESSES.multiSendAddress.length || !GNOSIS_SAFE_ADDRESSES.multiSendAddress.length || !GNOSIS_SAFE_ADDRESSES.multiSendAddress.length) {
+            console.log("⚠️  No Gnosis Safe address is defined.\n");
+            console.log("Please deploy a Gnosis safe contracts set as described here then specify the addresses in GNOSIS_SAFE_ADDRESSES.\n");
+            console.log("https://github.com/safe-global/safe-contracts#deployments\n");
+            return
+        }
+
         console.log('Deploying main multisig (Gnosis safe)...');
         const ethAdapter = new EthersAdapter({
             ethers,
             signer: deployer,
         });
-        const MultisigGNOSafe = await SafeFactory.create({ ethAdapter });
+
+        const contractNetworks = {
+            [552]: { // replace the ID with the correct network ID (currently Arctic)
+                ...GNOSIS_SAFE_ADDRESSES,
+            }
+        }
+
+        const MultisigGNOSafe = await SafeFactory.create({ ethAdapter, contractNetworks });
         multisig = await MultisigGNOSafe.deploySafe(MULTISIG);
         await confirmTransactionCount();
         multisig.address = multisig.getAddress();

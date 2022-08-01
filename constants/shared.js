@@ -1,5 +1,5 @@
 const owners = [
-  "0xd5Ca5E8fE68a8609ec91659C29eC31aCCfe3B0e1"
+  "0x3915dC8c57eA4c0978C34ef64820dFeb3760CeF7"
 ]
 
 const maxGas = 4000000

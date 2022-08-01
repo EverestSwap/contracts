@@ -12,7 +12,7 @@
     "hardhat": "^2.0.6",
     "openzeppelin-contracts-legacy": "yarn:@openzeppelin/contracts@3.3.0"
   },
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "Contracts for EverestSwap.",
   "main": "index.js",
   "repository": {

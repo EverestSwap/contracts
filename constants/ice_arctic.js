@@ -1,7 +1,7 @@
 const { OWNERS } = require('./shared')
 
-exports.WRAPPED_NATIVE_TOKEN;
-exports.MULTICALL_ADDRESS;
+exports.WRAPPED_NATIVE_TOKEN = "0xd92FB2844E76e455DfD0e20D46BCA2Cc77558B6e";
+exports.MULTICALL_ADDRESS = "0x3c68c784B94040d49C0b935ddfAedC36b8Dc8526";
 exports.NATIVE_TOKEN_NAME = "ICZ";
 exports.EVRS_SYMBOL = "EVRS";
 exports.EVRS_NAME = "Everest";
@@ -12,7 +12,12 @@ exports.MULTISIG = {
   owners: OWNERS,
   threshold: 1 // multisig owners count
 };
-exports.USE_GNOSIS_SAFE = false;
+exports.USE_GNOSIS_SAFE = true;
+exports.GNOSIS_SAFE_ADDRESSES = {
+  multiSendAddress: '0x5782b77C665e99Dc19F8d69A63E1697846d51b01',
+  safeMasterCopyAddress: '0xB14A20768097784cE478e9304F58873f84F6F451',
+  safeProxyFactoryAddress: '0x23cCC7463468e3C56A4CE37Afab577EB3dd0e3CB',
+}
 exports.PROPOSAL_THRESHOLD = 100000; // 100K
 exports.EVRS_STAKING_ALLOCATION = 500, // 5x weight in minichef
 exports.WETH_EVRS_FARM_ALLOCATION = 3000, // 30x weight
