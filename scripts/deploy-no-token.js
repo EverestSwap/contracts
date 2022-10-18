@@ -6,6 +6,7 @@ const {
     MULTISIG,
     USE_GNOSIS_SAFE,
     GNOSIS_SAFE_ADDRESSES,
+    FEE_RECIPIENT,
     WRAPPED_NATIVE_TOKEN,
     NATIVE_TOKEN_NAME,
     MULTICALL_ADDRESS
@@ -21,7 +22,7 @@ async function main() {
 
     const initBalance = await deployer.getBalance();
     console.log("Balance:", ethers.utils.formatEther(initBalance));
-    
+
     console.log("\nMultisig Owners:");
     for (const owner of MULTISIG.owners) {
         console.log(owner);
@@ -145,13 +146,13 @@ async function main() {
 
     console.log("\n===============\n CONFIGURATION \n===============");
 
-    await factory.setFeeTo(multisig.address);
+    await factory.setFeeTo(FEE_RECIPIENT);
     await confirmTransactionCount();
-    console.log("Set Multisig as the swap fee recipient.");
+    console.log("Set swap fee recipient.");
 
-    await factory.setFeeToSetter(multisig.address);
+    await factory.setFeeToSetter(FEE_RECIPIENT);
     await confirmTransactionCount();
-    console.log("Transferred EverestFactory ownership to Multisig.");
+    console.log("Transferred EverestFactory ownership.");
 
     const endBalance = await deployer.getBalance();
     console.log("\nDeploy cost:", ethers.utils.formatEther(initBalance.sub(endBalance)) + "\n");

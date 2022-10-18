@@ -40,7 +40,7 @@ const ICE_MAINNET = {
   tracked_by_debank: false,
   supported_by_gelato: false,
   rpc_uri: 'https://ice-rpc.icenetwork.io',
-  contracts: { // TODO: add contracts addresses
+  contracts: {
     token: '',
     factory: '',
     router: '',
@@ -56,7 +56,7 @@ const ICE_MAINNET = {
 
 const ICE_SNOW = {
   id: 'ice_snow',
-  chain_id: 551,
+  chain_id: 552,
   name: 'SNOW Network',
   symbol: 'ICZ',
   token_symbol: 'EVRS',
@@ -64,12 +64,12 @@ const ICE_SNOW = {
   dex_is_live: false,
   tracked_by_debank: false,
   supported_by_gelato: false,
-  rpc_uri: 'https://snow-rpc.icenetwork.io',
-  contracts: { // TODO: add contracts addresses
+  rpc_uri: 'https://snow-rpc.icenetwork.io:9933',
+  contracts: {
     token: '',
     factory: '',
     router: '',
-    wrapped_native_token: '',
+    wrapped_native_token: '0xd92FB2844E76e455DfD0e20D46BCA2Cc77558B6e',
   },
   nativeCurrency:{
     name: 'ICE',
@@ -90,7 +90,7 @@ const ICE_ARCTIC = {
   tracked_by_debank: false,
   supported_by_gelato: false,
   rpc_uri: 'https://arctic-rpc.icenetwork.io:9933',
-  contracts: { // TODO: add contracts addresses
+  contracts: {
     token: '',
     factory: '',
     router: '',

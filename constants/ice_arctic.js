@@ -2,6 +2,7 @@ const { OWNERS } = require('./shared')
 
 exports.WRAPPED_NATIVE_TOKEN = "0xd92FB2844E76e455DfD0e20D46BCA2Cc77558B6e";
 exports.MULTICALL_ADDRESS = "0x3c68c784B94040d49C0b935ddfAedC36b8Dc8526";
+exports.FEE_RECIPIENT;
 exports.NATIVE_TOKEN_NAME = "ICZ";
 exports.EVRS_SYMBOL = "EVRS";
 exports.EVRS_NAME = "Everest";
