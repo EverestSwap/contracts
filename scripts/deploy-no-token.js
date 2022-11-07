@@ -156,7 +156,7 @@ async function main() {
 
     const endBalance = await deployer.getBalance();
     console.log("\nDeploy cost:", ethers.utils.formatEther(initBalance.sub(endBalance)) + "\n");
-    console.log("Recorded contract addresses to `addresses/" + network.name + ".js`.");
+    console.log("Recorded contract addresses to `addresses/" + network.name + "-no-token.js`.");
     console.log("Refer to `addresses/README.md` for Etherscan verification.\n");
 
     try {

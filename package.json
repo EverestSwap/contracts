@@ -25,6 +25,7 @@
     "compile": "npx hardhat compile",
     "deploy": "npx hardhat run scripts/deploy-mainnet.js",
     "deploy-no-token": "npx hardhat run scripts/deploy-no-token.js",
+    "deploy-minichef": "npx hardhat run scripts/deploy-minichef.js",
     "test": "npx hardhat test",
     "verify": "npx hardhat run scripts/verify.js",
     "lint": "prettier ./test/**/*.ts --check"
